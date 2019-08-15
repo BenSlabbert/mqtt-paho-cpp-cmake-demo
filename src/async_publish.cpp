@@ -12,24 +12,21 @@
 
 volatile MQTTClient_deliveryToken deliveredtoken;
 
-void delivered(void *context, MQTTClient_deliveryToken dt)
-{
+void delivered(void *context, MQTTClient_deliveryToken dt) {
     printf("Message with token value %d delivery confirmed\n", dt);
     deliveredtoken = dt;
 }
 
-int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *message)
-{
+int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *message) {
     int i;
-    char* payloadptr;
+    char *payloadptr;
 
     printf("Message arrived\n");
     printf("     topic: %s\n", topicName);
     printf("   message: ");
 
     payloadptr = static_cast<char *>(message->payload);
-    for(i=0; i<message->payloadlen; i++)
-    {
+    for (i = 0; i < message->payloadlen; i++) {
         putchar(*payloadptr++);
     }
     putchar('\n');
@@ -38,14 +35,12 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
     return 1;
 }
 
-void connlost(void *context, char *cause)
-{
+void connlost(void *context, char *cause) {
     printf("\nConnection lost\n");
     printf("     cause: %s\n", cause);
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char *argv[]) {
     MQTTClient client;
     MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
     MQTTClient_message pubmsg = MQTTClient_message_initializer;
@@ -53,14 +48,13 @@ int main(int argc, char* argv[])
     int rc;
 
     MQTTClient_create(&client, ADDRESS, CLIENTID,
-                      MQTTCLIENT_PERSISTENCE_NONE, NULL);
+                      MQTTCLIENT_PERSISTENCE_NONE, nullptr);
     conn_opts.keepAliveInterval = 20;
     conn_opts.cleansession = 1;
 
-    MQTTClient_setCallbacks(client, NULL, connlost, msgarrvd, delivered);
+    MQTTClient_setCallbacks(client, nullptr, connlost, msgarrvd, delivered);
 
-    if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS)
-    {
+    if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS) {
         printf("Failed to connect, return code %d\n", rc);
         exit(EXIT_FAILURE);
     }
@@ -73,7 +67,7 @@ int main(int argc, char* argv[])
     printf("Waiting for publication of %s\n"
            "on topic %s for client with ClientID: %s\n",
            PAYLOAD, TOPIC, CLIENTID);
-    while(deliveredtoken != token);
+    while (deliveredtoken != token);
     MQTTClient_disconnect(client, 10000);
     MQTTClient_destroy(&client);
     return rc;
