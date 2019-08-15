@@ -1,4 +1,5 @@
 version: '3.7'
+
 services:
   mosquitto:
     image: eclipse-mosquitto:1.6.4
