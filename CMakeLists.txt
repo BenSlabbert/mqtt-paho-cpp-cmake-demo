@@ -12,8 +12,9 @@ project("paho-mqtt-cpp-examples"
 set(PAHO_CPP_LIB paho-mqtt3c)
 ## --- Library dependencies ---
 
-set (THREADS_PREFER_PTHREAD_FLAG ON)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
+find_package(spdlog REQUIRED)
 
 ## include directories
 #include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -24,16 +25,17 @@ add_executable(async_consume src/async_consume.cpp)
 add_executable(async_publish src/async_publish.cpp)
 
 ## link binaries
-target_link_libraries(sync_publish ${PAHO_CPP_LIB})
-target_link_libraries(async_consume ${PAHO_CPP_LIB})
-target_link_libraries(async_publish ${PAHO_CPP_LIB})
+target_link_libraries(sync_publish PRIVATE spdlog::spdlog ${PAHO_CPP_LIB})
+target_link_libraries(async_consume PRIVATE spdlog::spdlog ${PAHO_CPP_LIB})
+target_link_libraries(async_publish PRIVATE spdlog::spdlog ${PAHO_CPP_LIB})
 
 set(INSTALL_TARGETS
         sync_publish
         async_consume
         )
 
-if(PAHO_WITH_SSL)
+# todo compile paho SSL libs
+if (PAHO_WITH_SSL)
     ## SSL binary files
     add_executable(ssl_publish ssl_publish.cpp)
 
@@ -45,7 +47,7 @@ if(PAHO_WITH_SSL)
             ssl_publish)
 
     add_definitions(-DOPENSSL)
-endif()
+endif ()
 
 ## install binaries
 install(TARGETS ${INSTALL_TARGETS} EXPORT PahoMqttCppSamples

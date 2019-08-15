@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "MQTTClient.h"
+#include "spdlog/spdlog.h"
 
 #define ADDRESS     "tcp://localhost:1883"
 #define CLIENTID    "ExampleClientSub"
@@ -41,6 +42,7 @@ void connlost(void *context, char *cause) {
 }
 
 int main(int argc, char *argv[]) {
+    spdlog::info("Welcome to spdlog version {}.{}.{}  !", SPDLOG_VER_MAJOR, SPDLOG_VER_MINOR, SPDLOG_VER_PATCH);
     MQTTClient client;
     MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
     int rc;
