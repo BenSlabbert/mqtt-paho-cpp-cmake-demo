@@ -1,5 +1,11 @@
 # paho-mqtt-cpp-examples
 
+## Built
+
+See the `Dockerfile`
+Run `docker build .` which will install all dependencies and build the 3 artifacts.
+You can use `docker cp` to get them out of the container
+
 ## Dependencies
 
 ### [paho.mqtt.c](https://github.com/eclipse/paho.mqtt.c) 
