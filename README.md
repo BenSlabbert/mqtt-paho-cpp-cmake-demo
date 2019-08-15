@@ -1,6 +1,6 @@
 # paho-mqtt-cpp-examples
 
-## Built
+## Build
 
 See the `Dockerfile`
 Run `docker build .` which will install all dependencies and build the 3 artifacts.
